@@ -5,13 +5,13 @@ import unittest
 
 from test_base import BaseTestCase
 
-import utils
+from tone import utils
 
 
 class TestCase(BaseTestCase):
 
     def test_attrdict(self):
-        from utils.attrdict import attrdict
+        from tone.utils.attrdict import attrdict
         data = attrdict()
         self.assertFalse(data)
         with self.assertRaises(AttributeError):
@@ -23,7 +23,7 @@ class TestCase(BaseTestCase):
         self.assertEqual(json.dumps(data), '{"key": 1}')
 
     def test_defaultattrdict(self):
-        from utils.attrdict import defaultattrdict
+        from tone.utils.attrdict import defaultattrdict
         data = defaultattrdict()
         self.assertFalse(data)
         self.assertFalse(data.data)
@@ -36,7 +36,7 @@ class TestCase(BaseTestCase):
         self.assertEqual(json.dumps(data), '{"data": {"data": {"data": 1}}}')
 
     def test_loads(self):
-        from utils.attrdict import attrdict
+        from tone.utils.attrdict import attrdict
 
         data = {'key': 123}
         data = attrdict.loads(data)
@@ -67,10 +67,9 @@ class TestCase(BaseTestCase):
 
         self.assertEqual(result.key[0].key, 123)
 
-    @unittest.skip(None)
     def test_performance(self):
-        from utils.attrdict import defaultattrdict
-        from utils.attrdict import attrdict
+        from tone.utils.attrdict import defaultattrdict
+        from tone.utils.attrdict import attrdict
         count = 100000
 
         def test_dict():

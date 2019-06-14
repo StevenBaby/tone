@@ -15,7 +15,7 @@ class TestCase(BaseTestCase):
         stderr = sys.stderr
         try:
             sys.stderr = StringIO()
-            import utils
+            from tone import utils
             logger = utils.get_logger()
             logger.debug('hello world')
             self.assertTrue('hello world' in sys.stderr.getvalue())
