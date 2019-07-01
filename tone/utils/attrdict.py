@@ -20,7 +20,7 @@ class attrdict(dict):
     @classmethod
     def loads(cls, value):
         if type(value) is dict:
-            result = attrdict()
+            result = cls()
             result.update(value)
             for k, v in result.items():
                 result[k] = cls.loads(v)
@@ -33,6 +33,12 @@ class attrdict(dict):
         else:
             result = value
         return result
+
+    @classmethod
+    def json_loads(cls, value):
+        import json
+        data = json.loads(value)
+        return cls.loads(data)
 
 
 class defaultattrdict(attrdict):

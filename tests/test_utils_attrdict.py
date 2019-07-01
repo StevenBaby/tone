@@ -67,6 +67,25 @@ class TestCase(BaseTestCase):
 
         self.assertEqual(result.key[0].key, 123)
 
+    def test_json_loads(self):
+        json = '{"data":{"data":1},"datas":[{"data":1}]}'
+        from tone.utils.attrdict import defaultattrdict
+        from tone.utils.attrdict import attrdict
+
+        data = attrdict.json_loads(json)
+        self.assertTrue(data)
+        self.assertIsInstance(data, attrdict)
+
+        data = defaultattrdict.json_loads(json)
+        self.assertTrue(data)
+        self.assertIsInstance(data, defaultattrdict)
+
+        json = '[{"data":1},{"data":1}]'
+        data = defaultattrdict.json_loads(json)
+        self.assertTrue(data)
+        self.assertIsInstance(data, list)
+        self.assertEqual(len(data), 2)
+
     def test_performance(self):
         from tone.utils.attrdict import defaultattrdict
         from tone.utils.attrdict import attrdict
