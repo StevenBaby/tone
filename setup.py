@@ -34,7 +34,7 @@ setup(
     ],
     author="StevenKang",
     author_email="kangweibaby@163.com",
-    url="https://github.com/StevenKangWei/tone",
+    url="https://github.com/StevenBaby/tone",
     license="MIT",
     include_package_data=True,
     zip_safe=True,
