@@ -20,3 +20,9 @@ def autoreload(module=None):
 
     ipy.run_line_magic('autoreload', '1')
     ipy.run_line_magic('aimport', module)
+
+
+class StopExecution(Exception):
+
+    def _render_traceback_(self):
+        pass
