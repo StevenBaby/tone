@@ -44,5 +44,5 @@ setup(
 
 # python setup.py sdist bdist_wheel --universal
 # twine upload dist/*
-# pip2 install dandan --upgrade -i https://pypi.python.org/simple
-# pip3 install dandan --upgrade -i https://pypi.python.org/simple
+# pip2 install tone --upgrade -i https://pypi.python.org/simple
+# pip3 install tone --upgrade -i https://pypi.python.org/simple

@@ -2,4 +2,5 @@
 
 from .logger import get_logger  # noqa
 from . import attrdict  # noqa
-from . import ipython
+from . import ipython  # noqa
+from . import learning  # noqa
