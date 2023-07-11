@@ -1,3 +1,5 @@
+import torch.nn as nn
+
 
 def ignore_warning():
     import warnings
@@ -25,7 +27,7 @@ def try_use_device(cuda=True, tensor=True):
     return device
 
 
-def load_model(model, filename):
+def load_model(model, filename) -> nn.Module:
     import torch
     model.load_state_dict(torch.load(filename))
     model.eval()
@@ -59,7 +61,7 @@ def save_module(model, filename):
         file.write(pickle.dumps(attr))
 
 
-def load_module(filename):
+def load_module(filename) -> nn.Module:
     import pickle
     with open(filename, 'rb') as file:
         attr = pickle.loads(file.read())
@@ -83,10 +85,11 @@ def save_pickle(model, filename):
         file.write(pickle.dumps(model))
 
 
-def load_pickle(filename):
+def load_pickle(filename) -> nn.Module:
     import pickle
     with open(filename, 'rb') as file:
         model = pickle.loads(file.read())
+    model.eval()
     return model
 
 
