@@ -43,6 +43,33 @@ def save_model(model, filename):
     torch.save(model.state_dict(), filename)
 
 
+def save_module(model, filename):
+    from .attrdict import attrdict
+    import pickle
+    import os
+    attr = attrdict()
+    attr.classname = type(model)
+    attr.state_dict = model.state_dict()
+
+    dirname = os.path.dirname(filename)
+    if not os.path.exists(dirname):
+        os.makedirs(dirname)
+
+    with open(filename, 'wb') as file:
+        file.write(pickle.dumps(attr))
+
+
+def load_module(filename):
+    import pickle
+    with open(filename, 'rb') as file:
+        attr = pickle.loads(file.read())
+
+    model = attr.classname()
+    model.load_state_dict(attr.state_dict)
+    model.eval()
+    return model
+
+
 def metrics(y_true, y_pred):
     from .attrdict import attrdict
     from sklearn import metrics as m
