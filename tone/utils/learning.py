@@ -99,11 +99,88 @@ def metrics(y_true, y_pred):
     import math
 
     scores = attrdict()
-    scores.mape = m.mean_absolute_percentage_error(y_true, y_pred)
-    scores.mse = m.mean_squared_error(y_true, y_pred)
-    scores.rmse = math.sqrt(scores.mse)
-    scores.mae = m.mean_absolute_error(y_true, y_pred)
-    scores.vs = m.explained_variance_score(y_true, y_pred)
-    scores.r2 = m.r2_score(y_true, y_pred)
+    scores.MAPE = m.mean_absolute_percentage_error(y_true, y_pred)
+    scores.MSE = m.mean_squared_error(y_true, y_pred)
+    scores.RNSE = math.sqrt(scores.MSE)
+    scores.MAE = m.mean_absolute_error(y_true, y_pred)
+    scores.EVS = m.explained_variance_score(y_true, y_pred)
+    scores.R2 = m.r2_score(y_true, y_pred)
 
     return scores
+
+
+def naive_fit(model, dataset, criterion, optimizer, epoch, batch_size, device, shuffle, progress=True, step_callback=None):
+    import torch
+    from tqdm import tqdm
+
+    dataloader = torch.utils.data.DataLoader(
+        dataset=dataset,
+        batch_size=batch_size,
+        drop_last=True,
+        generator=torch.Generator(device=device),
+        shuffle=shuffle,
+    )
+
+    batch = len(dataloader)
+
+    losses = []
+
+    def updater(x, t):
+        y = model.forward(x)
+        loss = criterion(y, t)
+        optimizer.zero_grad()
+        loss.backward()
+        optimizer.step()
+        return loss
+
+    if step_callback is None:
+        step_callback = updater
+
+    with tqdm(total=epoch * batch) as bar:
+        for e in range(epoch):
+            for i, (x, t) in enumerate(dataloader):
+
+                loss = step_callback(x, t)
+                losses.append(loss.item())
+
+                if progress:
+                    bar.set_description(f"({e + 1:02}/{epoch}) | ({i + 1:02}/{batch})")
+                    bar.update()
+                    bar.set_postfix(loss=f"{loss.item():0.6}")
+
+    return losses
+
+
+def naive_test(models, dataset, batch_size, device, progress=True):
+    import torch
+    from tqdm import tqdm
+
+    dataloader = torch.utils.data.DataLoader(
+        dataset=dataset,
+        batch_size=batch_size,
+        drop_last=True,
+        generator=torch.Generator(device=device),
+        shuffle=False,
+    )
+
+    if progress:
+        dataloader = tqdm(dataloader)
+
+    preds = []
+    for model in models:
+        model.eval()
+        preds.append([])
+
+    real = []
+
+    for x, t in dataloader:
+        real.append(t)
+        for i, model in enumerate(models):
+            y = model.forward(x)
+            preds[i].append(y)
+
+    real = torch.cat(real)
+    for i, pred in enumerate(preds):
+        preds[i] = torch.cat(pred)
+
+    return real, preds
