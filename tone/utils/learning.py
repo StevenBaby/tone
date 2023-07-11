@@ -89,7 +89,10 @@ def load_pickle(filename) -> nn.Module:
     import pickle
     with open(filename, 'rb') as file:
         model = pickle.loads(file.read())
-    model.eval()
+
+    if hasattr(model, 'eval') and callable(model.eval):
+        model.eval()
+
     return model
 
 
