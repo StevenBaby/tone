@@ -40,6 +40,17 @@ class TestCase(BaseTestCase):
         self.assertEqual(type(model), Model)
         os.remove(filename)
 
+    def test_save_load_pickle(self):
+        import os
+        from tone.utils import learning
+
+        model = Model()
+        filename = './test_model.pt'
+        learning.save_pickle(model, filename)
+        model = learning.load_pickle(filename)
+        self.assertEqual(type(model), Model)
+        os.remove(filename)
+
 
 if __name__ == '__main__':
     TestCase.main()

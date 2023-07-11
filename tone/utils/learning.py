@@ -70,6 +70,26 @@ def load_module(filename):
     return model
 
 
+def save_pickle(model, filename):
+
+    import pickle
+    import os
+
+    dirname = os.path.dirname(filename)
+    if not os.path.exists(dirname):
+        os.makedirs(dirname)
+
+    with open(filename, 'wb') as file:
+        file.write(pickle.dumps(model))
+
+
+def load_pickle(filename):
+    import pickle
+    with open(filename, 'rb') as file:
+        model = pickle.loads(file.read())
+    return model
+
+
 def metrics(y_true, y_pred):
     from .attrdict import attrdict
     from sklearn import metrics as m
