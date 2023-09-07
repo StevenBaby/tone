@@ -1,9 +1,12 @@
 import torch.nn as nn
 
 
-def ignore_warning():
+def ignore_warning(category=None):
     import warnings
-    warnings.filterwarnings("ignore", category=UserWarning)
+    if category is not None:
+        warnings.filterwarnings("ignore", category=category)
+    else:
+        warnings.filterwarnings('ignore')
 
 
 def set_plot_formats(formats='svg'):

@@ -29,6 +29,12 @@ class TestCase(BaseTestCase):
         pred = real + np.random.randn(real.shape[0]) * 0.01
         scores = metrics(real, pred)
 
+    def test_ignore_warning(self):
+        import tone
+        import warnings
+        tone.utils.learning.ignore_warning()
+        warnings.warn("test warning..")
+
     def test_save_load_module(self):
         import os
         from tone.utils import learning
